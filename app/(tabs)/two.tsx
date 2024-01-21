@@ -1,15 +1,25 @@
 import { StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../../components/EditScreenInfo';
-import { Text, View } from '../../components/Themed';
+import { Box, Button, Input, NativeBaseProvider, Text, TextArea } from 'native-base';
+import { useState } from 'react'
 
 export default function TabTwoScreen() {
+  const [question, setQuestion] = useState("")
+  const [asked, setAsked] = useState(false);
+  const [answer, setAnswer] = useState("You haven't asked me anything 😞 \n")
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
-    </View>
+    <NativeBaseProvider>
+      <Box flex={1} bgColor="white" padding={5} paddingTop={3}> 
+        <Text fontWeight="bold" marginBottom={3} >Mr App answers questions about your notes </Text>
+        <Input placeholder="Ask Mr App a question..." value={question == "" ? null : question} onChangeText={(t) => setQuestion(t)}></Input>
+        <Button marginTop={3} isDisabled={question == ""} isLoading={asked} onPress={e => setAsked(true)}>Ask!</Button>
+
+        <Text fontWeight="bold" marginTop={7}>Mr App's Brain</Text>
+        <TextArea autoCompleteType={null} flexGrow={1} marginTop={3} fontSize={14} value={asked ? "Mr App is reading your notes and thinking of a reply..." : answer}></TextArea>
+      </Box>
+    </NativeBaseProvider>
   );
 }
 

@@ -1,9 +1,11 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
+import { SplashScreen, Stack, Tabs } from 'expo-router';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoginScreen from './login';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -45,11 +47,37 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
+  AsyncStorage.removeItem("notes");
+  AsyncStorage.setItem("account", "JohnTheNotetaker");
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack.Screen 
+        options={{
+            title: "Edit note  💻 ",
+            presentation: 'modal'
+          }}
+        name="modal"/>
+        <Stack.Screen 
+        options={{
+            title: "Profile",
+          }}
+          name="profile"
+        />
+        <Stack.Screen 
+        options={{
+            title: "Login",
+          }}
+          name="login"
+        />
+       <Stack.Screen 
+        options={{
+            title: "Sign Up",
+          }}
+          name="signup"
+        />
       </Stack>
     </ThemeProvider>
   );

@@ -1,6 +1,10 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Link, Tabs } from 'expo-router';
 import { Pressable, useColorScheme } from 'react-native';
+import { useState, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Colors from '../../constants/Colors';
 
@@ -15,7 +19,12 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme(); 
+  const [account, setAccount] = useState("JohnTheNotetaker");
+
+  useEffect(() => {AsyncStorage.getItem('account').then((value) => {
+    setAccount(value);
+  })}, [])
 
   return (
     <Tabs
@@ -25,14 +34,22 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'My Notes 🤓 👆 ' ,
+          tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
           headerRight: () => (
-            <Link href="/modal" asChild>
+            <Link href={account === null ? "/login" : "/profile"} asChild>
               <Pressable>
                 {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
+                  account === null ?
+                  <MaterialIcons
+                    name="login"
+                    size={25}
+                    color={Colors[colorScheme ?? 'light'].text}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                  :
+                   <MaterialCommunityIcons
+                    name="face-man-profile"
                     size={25}
                     color={Colors[colorScheme ?? 'light'].text}
                     style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
@@ -46,8 +63,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="two"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Mr App 🤖',
+          tabBarIcon: ({ color }) => <TabBarIcon name="random" color={color} />,
         }}
       />
     </Tabs>
