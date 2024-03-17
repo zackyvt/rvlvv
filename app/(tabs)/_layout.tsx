@@ -20,7 +20,7 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme(); 
-  const [account, setAccount] = useState("JohnTheNotetaker");
+  const [account, setAccount] = useState(undefined);
 
   useEffect(() => {AsyncStorage.getItem('account').then((value) => {
     setAccount(value);
@@ -58,6 +58,13 @@ export default function TabLayout() {
               </Pressable>
             </Link>
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="calendar"
+        options={{
+          title: 'Dates 📅',
+          tabBarIcon: ({ color }) => <TabBarIcon name="calendar" color={color} />,
         }}
       />
       <Tabs.Screen
